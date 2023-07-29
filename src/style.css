@@ -1,0 +1,99 @@
+html, body {
+    margin: 0; 
+    height: 100%; 
+}
+
+.game-container {
+    display: flex; 
+    justify-content: space-between;
+    gap: 10px; 
+    margin: 50px; 
+
+
+}
+
+#board {
+    background-color: rebeccapurple;
+    height: 500px; 
+    width: 500px; 
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+
+}
+
+.square {
+    border: 1px solid black; 
+    height: 50px; 
+    width: 50px; 
+
+    box-sizing: border-box;
+
+}
+
+[class="square"]:hover {
+    background-color: rgb(150, 68, 233);    
+}
+
+
+#ship { 
+    height: 50px; 
+
+    border: 1.2px dotted white;
+
+}
+
+
+.ship-container {
+    display: flex;
+    gap: 20px; 
+}
+
+.carrier-ship, .carrier-preview {
+    background-color: blue;
+    /* width: 250px;  */
+}
+
+.battle-ship, .battle-preview{
+    background-color: brown;
+    /* width: 200px; */ 
+}
+
+.cruiser-ship, .cruiser-preview{
+    background-color: cadetblue;
+    /* width: 150px;  */
+}
+
+.submarine-ship, .submarine-preview {
+    background-color: yellow;
+    /* width: 150px;  */
+}
+
+
+.destroyer-ship, .destroyer-preview { 
+    background-color: red;
+    /* width: 100px; */ 
+}
+
+.carrier-preview {
+    width: 250px; 
+}
+
+.battle-preview {
+    width: 200px; 
+}
+
+.cruiser-preview {
+    width: 150px; 
+}
+
+.submarine-preview {
+    width: 150px; 
+}
+
+.destroyer-preview {
+    width: 100px; 
+}
+

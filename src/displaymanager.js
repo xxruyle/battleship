@@ -1,0 +1,7 @@
+const DisplayManager = (() => {
+})();
+
+
+export {
+    DisplayManager
+}
