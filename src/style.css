@@ -37,6 +37,10 @@ html, body {
     background-color: rgb(150, 68, 233);    
 }
 
+.highlight {
+    background-color: rgb(150, 68, 233);  
+}
+
 
 #ship { 
     height: 50px; 
@@ -97,3 +101,7 @@ html, body {
     width: 100px; 
 }
 
+.missle {
+    border-radius: 10px;
+    background-color: red   ;
+}

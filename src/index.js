@@ -13,12 +13,13 @@ function main() {
 
 
 
-    let game = GameManager(playerBoard);
-
+    let game = GameManager(playerBoard, enemyBoard);
+    game.placeRandom()
     game.detectRotate();
-    game.detectPlacement();
+    game.detectPlacement(playerBoard);
 
 
+    // playerBoard.highlightHover(game.getCurrentShip());
 
 
 }

@@ -1,4 +1,7 @@
 const GameBoard = (boardNode) => {
+    let possibleShips = ['carrier-ship', 'battle-ship', 'cruiser-ship', 'submarine-ship', 'destroyer-ship'];
+
+
     const initBoard = () => {
         for (let i = 0; i < 100; i++)  {
             const squareNode = document.createElement('div');
@@ -8,6 +11,37 @@ const GameBoard = (boardNode) => {
             boardNode.appendChild(squareNode);
         }
     }
+
+    const placeRandom = (game) => {
+        while (game.getCurrentPointer() < 5) 
+        {
+            let randomCoord = Math.floor(Math.random() * 100);
+
+            let randomRotate = Math.random(); 
+
+            if (randomRotate < 0.5) {
+                game.getEnemyShip().rotate();
+            }
+
+            let placeResult = place(randomCoord, game.getEnemyShip());
+
+            if (placeResult) {
+                game.incrementEnemyShipPointer();
+            }
+
+        }
+    }
+
+    const containsShipClass = (classArray) => {
+        for (let i = 0; i < possibleShips.length; i++) {
+            if (classArray.includes(possibleShips[i])) {
+                return false 
+            }
+        }
+
+        return true
+    }
+
     
     const isValidPlacement = (coordinate, ship) => {
         // checks to see if the coordinate placement is valid 
@@ -44,7 +78,7 @@ const GameBoard = (boardNode) => {
         for (let i = 0; i < ship.length; i++)
         {
             let locationNode = boardNode.querySelector(`[id='${coord}']`);
-            if (Array.from(locationNode.classList).length < 2) {
+            if (containsShipClass(Array.from(locationNode.classList))) {
 
                 if (ship.getRotation() === 0) { // horizontal
 
@@ -65,9 +99,7 @@ const GameBoard = (boardNode) => {
 
     }
 
-    const shipStyling = (index, rotation) => {
 
-    }
 
 
     const place = (coordinate, ship) => {   
@@ -93,14 +125,75 @@ const GameBoard = (boardNode) => {
             }
         }
 
+        clearHighlights();
         return true; // returns true if placement was successful
     }   
 
 
+    const showShipPreview = (id, currentShip) => {
+        if (isValidPlacement(id, currentShip) && (isEmptySquares(id, currentShip))) {
+            for (let i = 0; i < ship.length; i++)
+            {
+    
+                
+                let locationNode = boardNode.querySelector(`[id='${id}']`);
+                locationNode.classList.add('highlight');
+
+                if (currentShip.getRotation() === 0) { // horizontal
+                    id += 1; 
+                } else { // vertical 
+                    id += 10; 
+                }
+            }
+        }   
+    }
+
+
+    const clearHighlights = () => {
+        const board = document.querySelector('#board');
+
+        const squares = board.querySelectorAll('.square');
+
+        squares.forEach((square) => {
+            if (Array.from(square.classList).includes('highlight'))
+            {
+                square.classList.remove('highlight');
+            }
+        })
+    }
+
+    const highlightHover = (currentShip) => {
+        const board = document.querySelector('#board');
+
+        board.addEventListener('mouseover', () => {
+            const squares = document.querySelectorAll('.square');
+
+
+/*             squares.forEach((square) => {
+                if (Array.from(square.classList).includes('highlight'))
+                {
+                    square.classList.remove('highlight');
+                }
+            }) */
+
+            squares.forEach((square) => {
+                square.addEventListener('mouseover', () => {
+
+
+                    showShipPreview(Number(square.id), currentShip)
+
+                })
+
+
+/*                 if (Array.from(e.target.classList).includes('highlight')) {
+                } */
+            })
+        }) 
+    }
 
 
 
-    return {initBoard, place}
+    return {initBoard, placeRandom, place, highlightHover}
 }
 
 export {
