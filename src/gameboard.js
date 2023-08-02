@@ -32,14 +32,19 @@ const GameBoard = (boardNode) => {
         }
     }
 
+    const containsMissle = (classArray) => {
+        return classArray.includes('missle');
+    }
+
+
     const containsShipClass = (classArray) => {
         for (let i = 0; i < possibleShips.length; i++) {
             if (classArray.includes(possibleShips[i])) {
-                return false 
+                return true 
             }
         }
 
-        return true
+        return false
     }
 
     
@@ -78,7 +83,7 @@ const GameBoard = (boardNode) => {
         for (let i = 0; i < ship.length; i++)
         {
             let locationNode = boardNode.querySelector(`[id='${coord}']`);
-            if (containsShipClass(Array.from(locationNode.classList))) {
+            if (!containsShipClass(Array.from(locationNode.classList))) {
 
                 if (ship.getRotation() === 0) { // horizontal
 
@@ -149,6 +154,121 @@ const GameBoard = (boardNode) => {
     }
 
 
+
+    const checkPlayerWin = () => {
+        let enemyBoard = document.querySelector('.board-enemy');
+        let opponentBoard = document.querySelector('.board-opponent');
+
+        let enemySquares = enemyBoard.querySelectorAll('.square');
+
+        let res = true; 
+
+
+        enemySquares.forEach((square) => {
+            let squareClasses = Array.from(square.classList);
+
+            let opponentSquare = opponentBoard.querySelector(`[id='${square.id}']`)
+            let opponentClasses = Array.from(opponentSquare.classList);
+
+
+
+            if (containsShipClass(squareClasses)) {
+                if (!containsMissle(opponentClasses)) {
+                    console.log(square, 'its not a win!');
+                    res = false; 
+                }
+            }
+
+        })
+
+        return res; 
+
+    }
+
+    const checkEnemyWin = () => {
+        let playerBoard = document.querySelector('.board-player');
+
+        let playerSquares = playerBoard.querySelectorAll('.square');
+
+        let res = true; 
+
+        playerSquares.forEach((square) => {
+            let squareClasses = Array.from(square.classList);
+
+            if (containsShipClass(squareClasses)) {
+                if (!containsMissle(squareClasses)) {
+                    res = false; 
+                }
+            }
+
+        })
+
+        return res; 
+    }
+
+
+
+    const detectPlayerAttack = (roundHandler, gameManager) => {
+        let opponentBoard = document.querySelector('.board-opponent')
+
+
+        opponentBoard.addEventListener('click', (event) => {
+            console.log(roundHandler.getCurrentMover(), gameManager.getCanPlace())
+            if (roundHandler.getCurrentMover() === "player" && !gameManager.getCanPlace())
+            {
+
+                let enemyAttackSquare = boardNode.querySelector(`[id='${event.target.id}']`)
+
+                if (containsShipClass(Array.from(enemyAttackSquare.classList)))
+                {
+                    event.target.classList.add(Array.from(enemyAttackSquare.classList)[Array.from(enemyAttackSquare.classList).length - 1]);
+                    event.target.classList.add('missle');
+
+
+                }
+
+                event.target.textContent = "X";
+                roundHandler.switchMover();
+                randomEnemyAttack(roundHandler);
+
+                if (checkPlayerWin()) {
+                    alert("player won!");
+                    location.reload();
+                }
+
+            } else {
+                console.log("Not player's turn")
+            }
+        })
+    }
+
+    const randomEnemyAttack = (roundHandler) => {
+        if (roundHandler.getCurrentMover() === "enemy")
+        {
+            let foundSquare = false; 
+
+            while (!foundSquare) {
+                let randomCoord = Math.floor(Math.random() * 100);
+                let playerBoard = document.querySelector('.board-player');
+                let coordNode = playerBoard.querySelector(`[id='${Number(randomCoord)}']`);
+
+                if (!containsMissle(Array.from(coordNode.classList))) {
+                    coordNode.textContent = "X"; 
+                    foundSquare = true;
+                    roundHandler.switchMover();
+                }
+            }
+
+            if (checkEnemyWin()) {
+                alert("Enemy has won!")
+            }
+        }
+    }
+
+
+
+
+
     const clearHighlights = () => {
         const board = document.querySelector('#board');
 
@@ -193,7 +313,7 @@ const GameBoard = (boardNode) => {
 
 
 
-    return {initBoard, placeRandom, place, highlightHover}
+    return {initBoard, placeRandom, place, highlightHover, detectPlayerAttack}
 }
 
 export {

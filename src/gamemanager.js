@@ -45,8 +45,10 @@ const GameManager = (board, enemyBoard) => {
         if (shipPointer < 5) {
             shipPointer += 1; 
             currentShip = shipDic[shipPointer];
-        } else { 
-            canPlace = false; 
+        } 
+
+        if (shipPointer === 5) {
+            changeCanPlace();
         }
     }
 
@@ -55,6 +57,10 @@ const GameManager = (board, enemyBoard) => {
             enemyShipPointer += 1; 
             currentEnemyShip = enemyShipDic[enemyShipPointer];
         } 
+    }
+
+    const changeCanPlace = () => {
+        canPlace = false; 
     }
 
 
@@ -66,6 +72,7 @@ const GameManager = (board, enemyBoard) => {
             currentShip.rotate();
         })
     }
+
 
 
     const detectPlacement = () => {
@@ -105,6 +112,8 @@ const GameManager = (board, enemyBoard) => {
 
 
 
+
+
     const getCurrentShip = () => {
         return currentShip; 
     }
@@ -120,12 +129,14 @@ const GameManager = (board, enemyBoard) => {
     const getCurrentEnemyPointer = () => {
         return enemyShipPointer;
     }
+    
+    const getCanPlace = () => {
+        return canPlace; 
+    }
 
 
 
-
-    return {placeRandom, detectRotate, incrementShipPointer, incrementEnemyShipPointer, detectPlacement, getCurrentShip, shipPointer, getCurrentPointer, getEnemyShip, getCurrentEnemyPointer 
-    };
+    return {placeRandom, detectRotate, incrementShipPointer, incrementEnemyShipPointer, detectPlacement, getCurrentShip, shipPointer, getCurrentPointer, getEnemyShip, getCurrentEnemyPointer, getCanPlace};
     
 }
 

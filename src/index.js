@@ -1,15 +1,21 @@
 import './style.css'
 import { GameBoard } from './gameboard'
-import { Ship } from './ship';
 import { GameManager } from './gamemanager';
+import { RoundManager } from './roundmanager';
 
 
 function main() {
     let playerBoard = GameBoard(document.querySelector('.board-player'));
     let enemyBoard = GameBoard(document.querySelector('.board-enemy'));
 
+    let opponentBoard = GameBoard(document.querySelector('.board-opponent'))
+
+    
+
     playerBoard.initBoard();
     enemyBoard.initBoard();
+
+    opponentBoard.initBoard();
 
 
 
@@ -17,6 +23,12 @@ function main() {
     game.placeRandom()
     game.detectRotate();
     game.detectPlacement(playerBoard);
+
+
+    let roundManager = RoundManager();
+
+
+    enemyBoard.detectPlayerAttack(roundManager, game);
 
 
     // playerBoard.highlightHover(game.getCurrentShip());
